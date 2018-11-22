@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -52,9 +53,11 @@ public class ChartActivity extends AppCompatActivity {
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setMaxX(iterationValues.size());
         graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setDrawBorder(true);
 
         TextView iterationTextView= (TextView)findViewById(R.id.iterationCounter);
-        iterationTextView.setText(getString(R.string.iterations1)+ (iterationValues.size()-1)+" "+getString(R.string.iterations2));
+        iterationTextView.setText(getString(R.string.iterations1)+ " "+ (iterationValues.size()-1)+" "+getString(R.string.iterations2));
+        iterationTextView.setTypeface(Typeface.DEFAULT_BOLD);
 
         TextView solution= (TextView)findViewById(R.id.solution);
         solution.setText(getString(R.string.solution) + BigDecimal.valueOf(iterationValues.get(iterationValues.size()-1))
