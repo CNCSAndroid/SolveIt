@@ -136,8 +136,8 @@ public class NewtonRaphsonSolver {
         while (Math.abs(f_value) >= EPSILON && iteration_counter<100){
             try {
                 Log.i(LOG_TAG,"Value with iteration number: "+iteration_counter+"is: "+x);
-                x -= ((f_value) / getDerivativeValue(x));
                 mapGraph.put(iteration_counter,x);
+                x -= ((f_value) / getDerivativeValue(x));
 
             }catch(Exception e){
                 Log.e(LOG_TAG,"Error occurred in newtonRaphson");

@@ -48,12 +48,16 @@ public class ChartActivity extends AppCompatActivity {
         paint.setPathEffect(new DashPathEffect(new float[]{8, 5}, 0));
         series.setCustomPaint(paint);
         graph.addSeries(series);
+        graph.getViewport().setMaxY(iterationValues.get(0)+10);
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMaxX(iterationValues.size());
+        graph.getViewport().setXAxisBoundsManual(true);
 
         TextView iterationTextView= (TextView)findViewById(R.id.iterationCounter);
-        iterationTextView.setText("Convergence achieved in "+iterationValues.size()+" iterations");
+        iterationTextView.setText(getString(R.string.iterations1)+ (iterationValues.size()-1)+" "+getString(R.string.iterations2));
 
         TextView solution= (TextView)findViewById(R.id.solution);
-        solution.setText("Value of variable is:"+BigDecimal.valueOf(iterationValues.get(iterationValues.size()-1))
+        solution.setText(getString(R.string.solution) + BigDecimal.valueOf(iterationValues.get(iterationValues.size()-1))
                 .setScale(3, RoundingMode.HALF_UP)
                 .doubleValue());
     }
