@@ -144,11 +144,7 @@ public class NewtonRaphsonSolver {
                 }
                 iteration_counter = iteration_counter + 1;
                 mapGraph.put(iteration_counter,x);
-
-            }catch(ArithmeticException e){
-                mapGraph.put(144477, (double) 0);
-                Log.e(LOG_TAG,"Arithmetic Error occurred in newtonRaphson");
-                return mapGraph;
+                
             }catch(Exception e){
                 mapGraph.put(144478, (double) 0);
                 Log.e(LOG_TAG,"Error occurred in newtonRaphson");
