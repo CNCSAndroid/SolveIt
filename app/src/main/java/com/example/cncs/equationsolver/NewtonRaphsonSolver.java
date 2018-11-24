@@ -138,6 +138,10 @@ public class NewtonRaphsonSolver {
                 Log.i(LOG_TAG,"Value with iteration number: "+iteration_counter+"is: "+x);
 
                 x -= ((f_value) / getDerivativeValue(x));
+                if(x==Double.POSITIVE_INFINITY||x==Double.NEGATIVE_INFINITY){
+                    mapGraph.put(144477, (double) 0);
+                    return mapGraph;
+                }
                 iteration_counter = iteration_counter + 1;
                 mapGraph.put(iteration_counter,x);
 

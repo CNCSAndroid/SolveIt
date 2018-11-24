@@ -32,7 +32,7 @@ public class ChartActivity extends AppCompatActivity {
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
         HashMap<Integer, Double> iterationValues = (HashMap<Integer, Double>) intent.getSerializableExtra("map");
         GraphView graph = (GraphView) findViewById(R.id.graph);
-        if (!iterationValues.containsKey(144477)||!iterationValues.containsKey(144478)) {
+        if (!iterationValues.containsKey(144477) && !iterationValues.containsKey(144478)) {
             DataPoint[] dataPoint = new DataPoint[iterationValues.size()];
             for (int i = 0; i < iterationValues.size(); i++) {
                 Log.i(LOG_TAG, "Key value pair is: key: " + i + "Value: " + iterationValues.get(i));
