@@ -25,7 +25,7 @@ public class NewtonRaphsonSolver {
 
     private static final String CHARACTER_REGULAR_EXPRESSION="[a-zA-Z]";
 
-    private static final String NUMBER_REGULAR_EXPRESSION="[1-9]";
+    private static final String NUMBER_REGULAR_EXPRESSION="[0-9]";
 
     private static final String MULTIPLY_SIGN="*";
 
@@ -132,18 +132,22 @@ public class NewtonRaphsonSolver {
         double x=x0;
         double f_value=getExpressionValue(x);
         int iteration_counter = 0;
-        mapGraph.put(iteration_counter,x);
+        mapGraph.put(iteration_counter,x0);
         while (Math.abs(f_value) >= EPSILON && iteration_counter<100){
             try {
                 Log.i(LOG_TAG,"Value with iteration number: "+iteration_counter+"is: "+x);
-                mapGraph.put(iteration_counter,x);
-                x -= ((f_value) / getDerivativeValue(x));
 
-            }catch(Exception e){
+                x -= ((f_value) / getDerivativeValue(x));
+                iteration_counter = iteration_counter + 1;
+                mapGraph.put(iteration_counter,x);
+
+            }catch(ArithmeticException e){
+                mapGraph.put(144477, (double) 0);
                 Log.e(LOG_TAG,"Error occurred in newtonRaphson");
+                return mapGraph;
             }
             f_value = getExpressionValue(x);
-            iteration_counter = iteration_counter + 1;
+
         }
 
         return mapGraph;
