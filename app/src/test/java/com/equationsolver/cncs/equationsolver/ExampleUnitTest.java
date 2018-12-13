@@ -1,4 +1,4 @@
-package com.example.cncs.equationsolver;
+package com.equationsolver.cncs.equationsolver;
 
 import org.junit.Test;
 

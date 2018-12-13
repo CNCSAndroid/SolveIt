@@ -1,4 +1,4 @@
-package com.example.cncs.equationsolver;
+package com.equationsolver.cncs.equationsolver;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.cncs.equationsolver", appContext.getPackageName());
+        assertEquals("com.com.cncs.equationsolver.cncs.equationsolver", appContext.getPackageName());
     }
 }

@@ -1,4 +1,4 @@
-package com.example.cncs.equationsolver;
+package com.equationsolver.cncs.equationsolver;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,12 +18,17 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 public class ChartActivity extends AppCompatActivity {
 
     private static final String LOG_TAG=ChartActivity.class.getName();
     private TextView mEmptyStateTextView;
+    private final int INFINITY_ERROR=144477;
+
+    private final int NON_INFINITY_ERROR=144478;
+
+    private final int NON_CONVERGENT_ERROR=144479;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +37,7 @@ public class ChartActivity extends AppCompatActivity {
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
         HashMap<Integer, Double> iterationValues = (HashMap<Integer, Double>) intent.getSerializableExtra("map");
         GraphView graph = (GraphView) findViewById(R.id.graph);
-        if (!iterationValues.containsKey(144477) && !iterationValues.containsKey(144478)) {
+        if (!iterationValues.containsKey(INFINITY_ERROR) && !iterationValues.containsKey(NON_INFINITY_ERROR)&& !iterationValues.containsKey(NON_CONVERGENT_ERROR)) {
             DataPoint[] dataPoint = new DataPoint[iterationValues.size()];
             for (int i = 0; i < iterationValues.size(); i++) {
                 Log.i(LOG_TAG, "Key value pair is: key: " + i + "Value: " + iterationValues.get(i));
@@ -45,7 +50,7 @@ public class ChartActivity extends AppCompatActivity {
             series.setDataPointsRadius(10);
             series.setThickness(8);
 
-// custom paint to make a dotted line
+            // custom paint to make a dotted line
             Paint paint = new Paint();
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.RED);
@@ -68,9 +73,12 @@ public class ChartActivity extends AppCompatActivity {
                     .setScale(3, RoundingMode.HALF_UP)
                     .doubleValue());
         }else{
-            if(iterationValues.containsKey(144477)){
+            if(iterationValues.containsKey(INFINITY_ERROR)){
                 mEmptyStateTextView.setText("Something went wrong! Divison by Zero error Occurred");
-            }else {
+            }else if(iterationValues.containsKey(NON_CONVERGENT_ERROR)){
+                mEmptyStateTextView.setText("Something went wrong! Either Derivative or expression is wrong");
+            }
+            else {
                 mEmptyStateTextView.setText("Something went wrong! Kindly try again");
             }
 
