@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EquationSolver</string>
+    <string name="app_name">SolveIt</string>
     <string name="iterations1">Convergence achieved in</string>
     <string name="iterations2">iterations!</string>
     <string name="solution">Solution of the equation is : </string>

@@ -136,13 +136,13 @@ public class NewtonRaphsonSolver {
     }
 
 
-    private LinkedHashMap<Integer,Double>  newtonRaphson(int iterations,double epsilon,double initialGuess){
+    private LinkedHashMap<Integer,Double>  newtonRaphson(int iterations,double initialGuess){
         LinkedHashMap<Integer,Double> mapGraph=new LinkedHashMap<Integer, Double>();
         double x=initialGuess;
         double f_value=getExpressionValue(x);
         int iteration_counter = 0;
         mapGraph.put(iteration_counter,initialGuess);
-        while (Math.abs(f_value) >= epsilon && iteration_counter<iterations){
+        while (Math.abs(f_value) >= EPSILON && iteration_counter<iterations){
             try {
                 Log.i(LOG_TAG,"Value with iteration number: "+iteration_counter+"is: "+x);
 
@@ -164,26 +164,24 @@ public class NewtonRaphsonSolver {
         }
         //NON_CONVERGENT_ERROR
         double ans=getExpressionValue(mapGraph.get(mapGraph.size() - 1));
-        if(ans>epsilon){
+        if(ans>EPSILON){
             mapGraph.put(NON_CONVERGENT_ERROR, mapGraph.get(mapGraph.size() - 1));
         }
         return mapGraph;
     }
 
-    public LinkedHashMap<Integer,Double> solveNewtonRaphson(String expression, String derivative,int iterations,double epsilon,double initialGuess){
+    public LinkedHashMap<Integer,Double> solveNewtonRaphson(String expression, String derivative,int iterations,double initialGuess){
         try {
             if(iterations==0){
                 iterations=100;
             }
-            if(epsilon==0.0){
-                epsilon=EPSILON;
-            }
+
             if(initialGuess==0){
                 initialGuess=INITIAL_GUESS;
             }
             this.setOrgExpression(expression);
             this.setOrgDerivative(derivative);
-            LinkedHashMap<Integer,Double> solution = this.newtonRaphson(iterations,epsilon,initialGuess);
+            LinkedHashMap<Integer,Double> solution = this.newtonRaphson(iterations,initialGuess);
             return solution;
         }finally{
             this.setOrgExpression(null);
