@@ -23,7 +23,7 @@ public class NonLinearActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 int iterations=0;
-                int initialGuess=0;
+                double initialGuess=0;
                 TextInputLayout expressionLayout= (TextInputLayout)findViewById(R.id.TextInputLayoutExpression);
                 expressionLayout.setErrorEnabled(true);
                 TextInputLayout derivativeLayout= (TextInputLayout)findViewById(R.id.TextInputLayoutDerivative);
@@ -56,7 +56,7 @@ public class NonLinearActivity extends AppCompatActivity {
                 EditText initialGuessText=(EditText)findViewById(R.id.initialGuess);
                 String initialGuessString=initialGuessText.getText().toString();
                 if(null!=initialGuessString && !"".equals(initialGuessString)){
-                    initialGuess=Integer.parseInt(initialGuessString);
+                    initialGuess=Double.parseDouble(initialGuessString);
                 }
 
 
