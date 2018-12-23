@@ -1,6 +1,7 @@
 package com.equationsolver.cncs.equationsolver;
 
 import android.content.Intent;
+import android.hardware.camera2.params.BlackLevelPattern;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +36,11 @@ public class NonLinearActivity extends AppCompatActivity {
                 if( TextUtils.isEmpty(expressionText.getText()) && TextUtils.isEmpty(derivativeText.getText())){
                     expressionLayout.setError( "Expression is mandatory" );
                     derivativeLayout.setError( "Derivative is mandatory" );
+                    return;
+                }
+
+                if (expression.contains("=")){
+                    expressionLayout.setError( "Kindly provide only expression by eliminating RHS" );
                     return;
                 }
                 if( TextUtils.isEmpty(expressionText.getText())){

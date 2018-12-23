@@ -1,6 +1,8 @@
 package com.equationsolver.cncs.equationsolver;
 
+
 import android.util.Log;
+
 
 import java.util.LinkedHashMap;
 
@@ -39,6 +41,8 @@ public class NewtonRaphsonSolver {
 
     private final int NON_CONVERGENT_ERROR=144479;
 
+    String[] items=new String[]{"sin","cos","tan","cot","sec","cosec","sinh","cosh","tanh","coth","sech","cosech","asinh","acosh","atanh","acoth","asech","acosech","log"};
+
     public static String getOrgExpression() {
         return orgExpression;
     }
@@ -68,42 +72,44 @@ public class NewtonRaphsonSolver {
     private double getExpressionValue(double x){
        Object result;
        String evaluate=getOrgExpression();
-       String replaceString=BRACKET_OPEN+Double.toString(x)+BRACKET_CLOSE;
-        evaluate= evaluate.replaceAll(CHARACTER_REGULAR_EXPRESSION, replaceString);
-        for (int index = evaluate.indexOf(BRACKET_OPEN); index >= 0;index = evaluate.indexOf(BRACKET_OPEN, index + 1)){
-            if(index!=0) {
-                if(evaluate.substring(index-1, index).matches(NUMBER_REGULAR_EXPRESSION)) {
-                    evaluate=evaluate.substring(0, index)+MULTIPLY_SIGN+evaluate.substring(index);
+        evaluate=evaluate.replaceAll("\\s","");
+            String replaceString = BRACKET_OPEN + Double.toString(x) + BRACKET_CLOSE;
+            evaluate = evaluate.replaceAll(CHARACTER_REGULAR_EXPRESSION, replaceString);
+            for (int index = evaluate.indexOf(BRACKET_OPEN); index >= 0; index = evaluate.indexOf(BRACKET_OPEN, index + 1)) {
+                if (index != 0) {
+                    if (evaluate.substring(index - 1, index).matches(NUMBER_REGULAR_EXPRESSION)) {
+                        evaluate = evaluate.substring(0, index) + MULTIPLY_SIGN + evaluate.substring(index);
+                    }
                 }
+
             }
 
-        }
+            int length = replaceString.length();
+            while (evaluate.contains(RAISE_TO)) {
+                String expression1 = evaluate.substring(evaluate.indexOf(RAISE_TO) + 1, evaluate.indexOf(RAISE_TO) + 2);
+                evaluate = evaluate.substring(0, (evaluate.indexOf(RAISE_TO) - length)) + MATH_POWER + BRACKET_OPEN + replaceString + "," + expression1 + BRACKET_CLOSE + evaluate.substring(evaluate.indexOf(RAISE_TO) + 2, evaluate.length());
+            }
+            ScriptEngineManager manager = new ScriptEngineManager();
+            ScriptEngine engine = manager.getEngineByName("js");
+            try {
+                result = engine.eval(evaluate);
 
-        int length=replaceString.length();
-        while (evaluate.contains(RAISE_TO)) {
-            String expression1=evaluate.substring(evaluate.indexOf(RAISE_TO)+1,evaluate.indexOf(RAISE_TO)+2);
-            evaluate=evaluate.substring(0,(evaluate.indexOf(RAISE_TO)-length))+MATH_POWER+BRACKET_OPEN+replaceString+","+expression1+BRACKET_CLOSE+evaluate.substring(evaluate.indexOf(RAISE_TO)+2,evaluate.length());
-        }
-        ScriptEngineManager manager = new ScriptEngineManager();
-        ScriptEngine engine = manager.getEngineByName("js");
-        try{
-            result  = engine.eval(evaluate);
-
-        }catch(ScriptException e){
-            Log.e(LOG_TAG,"New script evaluation has occured",e);
-            return 0;
-        }
-        if(null != result){
-            return (double) result;
-        }else{
-            return 0;
-        }
+            } catch (ScriptException e) {
+                Log.e(LOG_TAG, "New script evaluation has occured", e);
+                return 0;
+            }
+            if (null != result) {
+                return (double) result;
+            } else {
+                return 0;
+            }
 
     }
 
     private double getDerivativeValue(double x) {
         Object result;
         String evaluate = getOrgDerivative();
+        evaluate=evaluate.replaceAll("\\s","");
         String replaceString=BRACKET_OPEN+Double.toString(x)+BRACKET_CLOSE;
         evaluate = evaluate.replaceAll(CHARACTER_REGULAR_EXPRESSION, replaceString);
         for (int index = evaluate.indexOf(BRACKET_OPEN); index >= 0;index = evaluate.indexOf(BRACKET_OPEN, index + 1)){
@@ -187,5 +193,16 @@ public class NewtonRaphsonSolver {
             this.setOrgExpression(null);
             this.setOrgDerivative(null);
         }
+    }
+
+    public static boolean stringContainsItemFromList(String inputStr, String[] items) {
+        for(int i =0; i < items.length; i++)
+        {
+            if(inputStr.contains(items[i]))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

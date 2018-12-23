@@ -9,15 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher1"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WelcomeScreen">
+        <activity android:name=".WelcomeScreen"   android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChartActivity"></activity>
-        <activity android:name=".NonLinearActivity"></activity>
+        <activity android:name=".ChartActivity"  android:screenOrientation="portrait"></activity>
+        <activity android:name=".NonLinearActivity"   android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
