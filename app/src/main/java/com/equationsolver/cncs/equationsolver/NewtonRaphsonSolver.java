@@ -5,6 +5,8 @@ import android.util.Log;
 
 
 import java.util.LinkedHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -73,6 +75,10 @@ public class NewtonRaphsonSolver {
        Object result;
        String evaluate=getOrgExpression();
         evaluate=evaluate.replaceAll("\\s","");
+        int evaluateExpression = indexOf(Pattern.compile("[a-zA-Z]"),evaluate);
+        if(Character.isDigit(evaluate.charAt(evaluateExpression+1))) {
+            throw new IllegalArgumentException();
+        }
             String replaceString = BRACKET_OPEN + Double.toString(x) + BRACKET_CLOSE;
             evaluate = evaluate.replaceAll(CHARACTER_REGULAR_EXPRESSION, replaceString);
             for (int index = evaluate.indexOf(BRACKET_OPEN); index >= 0; index = evaluate.indexOf(BRACKET_OPEN, index + 1)) {
@@ -95,7 +101,7 @@ public class NewtonRaphsonSolver {
                 result = engine.eval(evaluate);
 
             } catch (ScriptException e) {
-                Log.e(LOG_TAG, "New script evaluation has occured", e);
+                Log.e(LOG_TAG, "New script evaluation has occurred", e);
                 return 0;
             }
             if (null != result) {
@@ -110,6 +116,10 @@ public class NewtonRaphsonSolver {
         Object result;
         String evaluate = getOrgDerivative();
         evaluate=evaluate.replaceAll("\\s","");
+        int evaluateExpression = indexOf(Pattern.compile("[a-zA-Z]"),evaluate);
+        if(Character.isDigit(evaluate.charAt(evaluateExpression+1))) {
+            throw new IllegalArgumentException();
+        }
         String replaceString=BRACKET_OPEN+Double.toString(x)+BRACKET_CLOSE;
         evaluate = evaluate.replaceAll(CHARACTER_REGULAR_EXPRESSION, replaceString);
         for (int index = evaluate.indexOf(BRACKET_OPEN); index >= 0;index = evaluate.indexOf(BRACKET_OPEN, index + 1)){
@@ -145,28 +155,38 @@ public class NewtonRaphsonSolver {
     private LinkedHashMap<Integer,Double>  newtonRaphson(int iterations,double initialGuess){
         LinkedHashMap<Integer,Double> mapGraph=new LinkedHashMap<Integer, Double>();
         double x=initialGuess;
-        double f_value=getExpressionValue(x);
-        int iteration_counter = 0;
-        mapGraph.put(iteration_counter,initialGuess);
-        while (Math.abs(f_value) >= EPSILON && iteration_counter<iterations){
-            try {
-                Log.i(LOG_TAG,"Value with iteration number: "+iteration_counter+"is: "+x);
+        try {
+            double f_value = getExpressionValue(x);
+            int iteration_counter = 0;
+            mapGraph.put(iteration_counter, initialGuess);
+            while (Math.abs(f_value) >= EPSILON && iteration_counter < iterations) {
+                try {
+                    Log.i(LOG_TAG, "Value with iteration number: " + iteration_counter + "is: " + x);
 
-                x -= ((f_value) / getDerivativeValue(x));
-                if(x==Double.POSITIVE_INFINITY||x==Double.NEGATIVE_INFINITY){
-                    mapGraph.put(INFINITY_ERROR, (double) 0);
+                    x -= ((f_value) / getDerivativeValue(x));
+                    if (x == Double.POSITIVE_INFINITY || x == Double.NEGATIVE_INFINITY) {
+                        mapGraph.put(INFINITY_ERROR, (double) 0);
+                        return mapGraph;
+                    }
+                    iteration_counter = iteration_counter + 1;
+                    mapGraph.put(iteration_counter, x);
+
+                }catch(IllegalArgumentException ex){
+                    mapGraph.put(NON_CONVERGENT_ERROR,(double) 0);
+                    return mapGraph;
+
+                }catch (Exception e) {
+                    mapGraph.put(NON_INFINITY_ERROR, (double) 0);
+                    Log.e(LOG_TAG, "Error occurred in newton Raphson");
                     return mapGraph;
                 }
-                iteration_counter = iteration_counter + 1;
-                mapGraph.put(iteration_counter,x);
 
-            }catch(Exception e){
-                mapGraph.put(NON_INFINITY_ERROR, (double) 0);
-                Log.e(LOG_TAG,"Error occurred in newtonRaphson");
-                return mapGraph;
+                f_value = getExpressionValue(x);
+
             }
-            f_value = getExpressionValue(x);
-
+        }catch (IllegalArgumentException e){
+            mapGraph.put(NON_CONVERGENT_ERROR,(double) 0);
+            return mapGraph;
         }
         //NON_CONVERGENT_ERROR
         double ans=getExpressionValue(mapGraph.get(mapGraph.size() - 1));
@@ -195,14 +215,8 @@ public class NewtonRaphsonSolver {
         }
     }
 
-    public static boolean stringContainsItemFromList(String inputStr, String[] items) {
-        for(int i =0; i < items.length; i++)
-        {
-            if(inputStr.contains(items[i]))
-            {
-                return true;
-            }
-        }
-        return false;
+    public static int indexOf(Pattern pattern, String s) {
+        Matcher matcher = pattern.matcher(s);
+        return matcher.find() ? matcher.start() : -1;
     }
 }
