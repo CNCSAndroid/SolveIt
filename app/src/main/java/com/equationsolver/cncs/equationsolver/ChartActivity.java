@@ -21,30 +21,33 @@ import java.util.HashMap;
 
 public class ChartActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG=ChartActivity.class.getName();
+    private static final String LOG_TAG = ChartActivity.class.getName();
     private TextView mEmptyStateTextView;
-    private final int INFINITY_ERROR=144477;
+    private final int INFINITY_ERROR = 144477;
 
-    private final int NON_INFINITY_ERROR=144478;
+    private final int NON_INFINITY_ERROR = 144478;
 
-    private final int NON_CONVERGENT_ERROR=144479;
+    private final int NON_CONVERGENT_ERROR = 144479;
+
+    private final int INPUT_NOT_SUPPORTED = 144480;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
         Intent intent = getIntent();
-        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
+        mEmptyStateTextView = findViewById(R.id.empty_view);
         HashMap<Integer, Double> iterationValues = (HashMap<Integer, Double>) intent.getSerializableExtra("map");
-        GraphView graph = (GraphView) findViewById(R.id.graph);
-        if (!iterationValues.containsKey(INFINITY_ERROR) && !iterationValues.containsKey(NON_INFINITY_ERROR)&& !iterationValues.containsKey(NON_CONVERGENT_ERROR)) {
+        GraphView graph = findViewById(R.id.graph);
+        if (!iterationValues.containsKey(INFINITY_ERROR) && !iterationValues.containsKey(NON_INFINITY_ERROR) && !iterationValues.containsKey(NON_CONVERGENT_ERROR)
+                && !iterationValues.containsKey(INPUT_NOT_SUPPORTED)) {
             DataPoint[] dataPoint = new DataPoint[iterationValues.size()];
             for (int i = 0; i < iterationValues.size(); i++) {
                 Log.i(LOG_TAG, "Key value pair is: key: " + i + "Value: " + iterationValues.get(i));
                 dataPoint[i] = new DataPoint(i, iterationValues.get(i));
             }
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoint);
-            series.setTitle("Random Curve 1");
+            series.setTitle(getString(R.string.curve_title));
             series.setColor(Color.GREEN);
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
@@ -64,22 +67,25 @@ public class ChartActivity extends AppCompatActivity {
             graph.getViewport().setXAxisBoundsManual(true);
             graph.getViewport().setDrawBorder(true);
 
-            TextView iterationTextView = (TextView) findViewById(R.id.iterationCounter);
+            TextView iterationTextView =  findViewById(R.id.iterationCounter);
             iterationTextView.setText(getString(R.string.iterations1) + " " + (iterationValues.size() - 1) + " " + getString(R.string.iterations2));
             iterationTextView.setTypeface(Typeface.DEFAULT_BOLD);
 
-            TextView solution = (TextView) findViewById(R.id.solution);
+            TextView solution = findViewById(R.id.solution);
             solution.setText(getString(R.string.solution) + BigDecimal.valueOf(iterationValues.get(iterationValues.size() - 1))
                     .setScale(3, RoundingMode.HALF_UP)
                     .doubleValue());
-        }else{
-            if(iterationValues.containsKey(INFINITY_ERROR)){
-                mEmptyStateTextView.setText("Something went wrong! Divison by Zero error Occurred");
-            }else if(iterationValues.containsKey(NON_CONVERGENT_ERROR)){
-                mEmptyStateTextView.setText("Something went wrong! Either Derivative or expression is wrong");
-            }
-            else {
-                mEmptyStateTextView.setText("Something went wrong! Kindly try again");
+
+
+        } else {
+            if (iterationValues.containsKey(INFINITY_ERROR)) {
+                mEmptyStateTextView.setText(getString(R.string.division_by_zero));
+            } else if (iterationValues.containsKey(NON_CONVERGENT_ERROR)) {
+                mEmptyStateTextView.setText(getString(R.string.non_convergent));
+            } else if (iterationValues.containsKey(INPUT_NOT_SUPPORTED)) {
+                mEmptyStateTextView.setText(getString(R.string.not_supported_input));
+            } else {
+                mEmptyStateTextView.setText(getString(R.string.generalized_error));
             }
 
             graph.setVisibility(View.GONE);

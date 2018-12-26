@@ -33,5 +33,5 @@ public class WelcomeScreen extends AppCompatActivity {
             }
         }, SPLASH_TIME_OUT);
 
-        }
     }
+}
