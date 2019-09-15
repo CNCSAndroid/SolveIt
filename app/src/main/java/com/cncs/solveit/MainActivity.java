@@ -1,5 +1,6 @@
 package com.cncs.solveit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import java.util.LinkedHashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,6 +60,15 @@ public class MainActivity extends AppCompatActivity {
                 if (null != initialGuessString && !"".equals(initialGuessString)) {
                     initialGuess = Double.parseDouble(initialGuessString);
                 }
+
+
+                NewtonRaphsonSolver equationSolver = new NewtonRaphsonSolver();
+                LinkedHashMap<Integer, Double> solution = equationSolver.solveNewtonRaphson(expression, derivative, iterations, initialGuess);
+                Intent intent = new Intent(getBaseContext(), ChartActivity.class);
+
+                intent.putExtra("map", solution);
+
+                startActivity(intent);
             }
         });
     }

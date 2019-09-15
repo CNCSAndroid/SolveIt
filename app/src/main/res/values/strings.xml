@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">SolveIt</string>
+    <string name="iterations1">Convergence achieved in</string>
+    <string name="iterations2">iterations!</string>
+    <string name="solution">Solution of the equation is : </string>
+    <string name="division_by_zero">Something went wrong! Division by Zero error Occurred</string>
+    <string name="non_convergent">Something went wrong! Either Derivative or expression is wrong</string>
+    <string name="not_supported_input">Non Algebraic Equations are not supported currently</string>
+    <string name="generalized_error">Something went wrong! Kindly try again</string>
+    <string name="curve_title">Random Curve 1</string>
+    <string name="expression_mandatory">Expression is mandatory</string>
+    <string name="mandatory_derivative">Derivative is mandatory</string>
+    <string name="wrong_expression">Kindly provide only expression</string>
+    <string name="title_activity_chart">Solution to the equation</string>
 </resources>
