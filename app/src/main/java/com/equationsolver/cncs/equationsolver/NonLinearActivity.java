@@ -1,7 +1,6 @@
 package com.equationsolver.cncs.equationsolver;
 
 import android.content.Intent;
-import android.hardware.camera2.params.BlackLevelPattern;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -30,11 +29,9 @@ public class NonLinearActivity extends AppCompatActivity {
                 derivativeLayout.setErrorEnabled(true);
                 EditText expressionText = findViewById(R.id.editText);
                 String expression = expressionText.getText().toString();
-                EditText derivativeText = findViewById(R.id.editText2);
-                String derivative = derivativeText.getText().toString();
-                if (TextUtils.isEmpty(expressionText.getText()) && TextUtils.isEmpty(derivativeText.getText())) {
+                if (TextUtils.isEmpty(expressionText.getText())) {
                     expressionLayout.setError(getString(R.string.expression_mandatory));
-                    derivativeLayout.setError(getString(R.string.mandatory_derivative));
+
                     return;
                 }
 
@@ -46,10 +43,7 @@ public class NonLinearActivity extends AppCompatActivity {
                     expressionLayout.setError(getString(R.string.expression_mandatory));
                     return;
                 }
-                if (TextUtils.isEmpty(derivativeText.getText())) {
-                    derivativeLayout.setError(getString(R.string.mandatory_derivative));
-                    return;
-                }
+
                 EditText iterationText = findViewById(R.id.iterationText);
                 String iterationString = iterationText.getText().toString();
                 if (null != iterationString && !"".equals(iterationString)) {
@@ -65,7 +59,7 @@ public class NonLinearActivity extends AppCompatActivity {
 
 
                 NewtonRaphsonSolver equationSolver = new NewtonRaphsonSolver();
-                LinkedHashMap<Integer, Double> solution = equationSolver.solveNewtonRaphson(expression, derivative, iterations, initialGuess);
+                LinkedHashMap<Integer, Double> solution = equationSolver.solveNewtonRaphson(expression,  iterations, initialGuess);
                 Intent intent = new Intent(getBaseContext(), ChartActivity.class);
                 //intent.putExtra("EXTRA_SESSION_ID", sessionId);
                 intent.putExtra("map", solution);

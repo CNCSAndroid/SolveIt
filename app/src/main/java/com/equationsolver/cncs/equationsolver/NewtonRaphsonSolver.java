@@ -3,8 +3,6 @@ package com.equationsolver.cncs.equationsolver;
 
 import android.util.Log;
 
-
-import java.lang.invoke.WrongMethodTypeException;
 import java.util.InputMismatchException;
 import java.util.LinkedHashMap;
 import java.util.regex.Matcher;
@@ -51,9 +49,9 @@ public class NewtonRaphsonSolver {
         return orgExpression;
     }
 
-    public static String getOrgDerivative() {
+    /*public static String getOrgDerivative() {
         return orgDerivative;
-    }
+    }*/
 
     /**
      * This variable is used to store original expression value
@@ -67,14 +65,14 @@ public class NewtonRaphsonSolver {
         NewtonRaphsonSolver.orgExpression = orgExpression;
     }
 
-    public static void setOrgDerivative(String orgDerivative) {
+   /* public static void setOrgDerivative(String orgDerivative) {
         NewtonRaphsonSolver.orgDerivative = orgDerivative;
-    }
+    }*/
 
     /**
      * This variable is used to store original derivative value
      */
-    private static String orgDerivative;
+    //private static String orgDerivative;
 
     private double getExpressionValue(double x) {
         Object result;
@@ -121,48 +119,10 @@ public class NewtonRaphsonSolver {
 
     }
 
-    private double getDerivativeValue(double x) {
-        Object result;
-        String evaluate = getOrgDerivative();
-        evaluate = evaluate.replaceAll("\\s", "");
-        int evaluateExpression = indexOf(Pattern.compile("[a-zA-Z]"), evaluate);
-        if (evaluate.length() > evaluateExpression + 1 && evaluateExpression != -1) {
-            if (Character.isDigit(evaluate.charAt(evaluateExpression + 1))) {
-                throw new IllegalArgumentException();
-            }
-        }
-        if (stringMatcher(evaluate, items)) {
-            throw new InputMismatchException();
-        }
-
-        String replaceString = BRACKET_OPEN + Double.toString(x) + BRACKET_CLOSE;
-        evaluate = evaluate.replaceAll(CHARACTER_REGULAR_EXPRESSION, replaceString);
-        for (int index = evaluate.indexOf(BRACKET_OPEN); index >= 0; index = evaluate.indexOf(BRACKET_OPEN, index + 1)) {
-            if (index != 0) {
-                if (evaluate.substring(index - 1, index).matches(NUMBER_REGULAR_EXPRESSION)) {
-                    evaluate = evaluate.substring(0, index) + MULTIPLY_SIGN + evaluate.substring(index);
-                }
-            }
-
-        }
-        int length = replaceString.length();
-        while (evaluate.contains(RAISE_TO)) {
-            String expression1 = evaluate.substring(evaluate.indexOf(RAISE_TO) + 1, evaluate.indexOf(RAISE_TO) + 2);
-            evaluate = evaluate.substring(0, (evaluate.indexOf(RAISE_TO) - length)) + MATH_POWER + BRACKET_OPEN + replaceString + "," + expression1 + BRACKET_CLOSE + evaluate.substring(evaluate.indexOf(RAISE_TO) + 2, evaluate.length());
-        }
-
-        try {
-            result = engine.eval(evaluate);
-
-        } catch (ScriptException e) {
-            Log.e(LOG_TAG, "New script evaluation has occured", e);
-            return 0;
-        }
-        if (null != result) {
-            return (double) result;
-        } else {
-            return 0;
-        }
+    private double getDerivativeValue(double x, double epsilon) {
+        double fx=getExpressionValue(x);
+        double fxh=getExpressionValue((x-epsilon));
+        return ((fx-fxh)/epsilon);
     }
 
 
@@ -177,7 +137,7 @@ public class NewtonRaphsonSolver {
                 try {
                     Log.i(LOG_TAG, "Value with iteration number: " + iteration_counter + "is: " + x);
 
-                    x -= ((f_value) / getDerivativeValue(x));
+                    x -= ((f_value) / getDerivativeValue(x,EPSILON));
                     if (x == Double.POSITIVE_INFINITY || x == Double.NEGATIVE_INFINITY) {
                         mapGraph.put(INFINITY_ERROR, (double) 0);
                         return mapGraph;
@@ -216,7 +176,7 @@ public class NewtonRaphsonSolver {
         return mapGraph;
     }
 
-    public LinkedHashMap<Integer, Double> solveNewtonRaphson(String expression, String derivative, int iterations, double initialGuess) {
+    public LinkedHashMap<Integer, Double> solveNewtonRaphson(String expression, int iterations, double initialGuess) {
         try {
             if (iterations == 0) {
                 iterations = 100;
@@ -226,12 +186,11 @@ public class NewtonRaphsonSolver {
                 initialGuess = INITIAL_GUESS;
             }
             this.setOrgExpression(expression);
-            this.setOrgDerivative(derivative);
             LinkedHashMap<Integer, Double> solution = this.newtonRaphson(iterations, initialGuess);
             return solution;
         } finally {
             this.setOrgExpression(null);
-            this.setOrgDerivative(null);
+
         }
     }
 

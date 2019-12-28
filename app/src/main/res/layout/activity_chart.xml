@@ -4,6 +4,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_constraintGuide_begin="0dp"
@@ -11,15 +12,26 @@
     tools:context=".ChartActivity">
 
 
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/graph"
+     <com.jjoe64.graphview.GraphView
+         android:id="@+id/graph"
+         android:layout_width="match_parent"
+         android:layout_height="300dp"
+         android:orientation="vertical"
+         app:layout_constraintBottom_toTopOf="@+id/iterationCounter"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent" />
+
+   <!-- <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/iterationCounter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+    </com.github.mikephil.charting.charts.LineChart>-->
 
     <TextView
         android:id="@+id/iterationCounter"
@@ -72,6 +84,7 @@
         app:layout_constraintTop_toTopOf="@+id/graph">
 
     </TextView>
+
 
 
 </android.support.constraint.ConstraintLayout>

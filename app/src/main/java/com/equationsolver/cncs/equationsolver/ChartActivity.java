@@ -22,7 +22,9 @@ import java.util.HashMap;
 public class ChartActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = ChartActivity.class.getName();
+
     private TextView mEmptyStateTextView;
+
     private final int INFINITY_ERROR = 144477;
 
     private final int NON_INFINITY_ERROR = 144478;
@@ -37,6 +39,7 @@ public class ChartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chart);
         Intent intent = getIntent();
         mEmptyStateTextView = findViewById(R.id.empty_view);
+
         HashMap<Integer, Double> iterationValues = (HashMap<Integer, Double>) intent.getSerializableExtra("map");
         GraphView graph = findViewById(R.id.graph);
         if (!iterationValues.containsKey(INFINITY_ERROR) && !iterationValues.containsKey(NON_INFINITY_ERROR) && !iterationValues.containsKey(NON_CONVERGENT_ERROR)
@@ -67,6 +70,7 @@ public class ChartActivity extends AppCompatActivity {
             graph.getViewport().setXAxisBoundsManual(true);
             graph.getViewport().setDrawBorder(true);
 
+
             TextView iterationTextView =  findViewById(R.id.iterationCounter);
             iterationTextView.setText(getString(R.string.iterations1) + " " + (iterationValues.size() - 1) + " " + getString(R.string.iterations2));
             iterationTextView.setTypeface(Typeface.DEFAULT_BOLD);
@@ -75,6 +79,7 @@ public class ChartActivity extends AppCompatActivity {
             solution.setText(getString(R.string.solution) + BigDecimal.valueOf(iterationValues.get(iterationValues.size() - 1))
                     .setScale(3, RoundingMode.HALF_UP)
                     .doubleValue());
+
 
 
         } else {
@@ -90,6 +95,9 @@ public class ChartActivity extends AppCompatActivity {
 
             graph.setVisibility(View.GONE);
         }
+
+
+
     }
 
 }
